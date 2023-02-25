@@ -6,7 +6,7 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 16:31:56 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 16:50:36 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/24 20:26:06 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	slash(char **cmd)
 	{
 		write(2, cmd[0], ft_strlen(cmd[0]));
 		write(2, ": No such file or directory\n", 29);
+		//exit(EXIT_FAILURE);
 	}
 	else if (ft_strchr(cmd[0], '/') == 1 && access(cmd[0], X_OK) == 0)
 		return (3);
