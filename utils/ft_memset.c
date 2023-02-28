@@ -6,11 +6,12 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:49:19 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/14 16:31:47 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:43:56 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include "../pipex_bonus.h"
 
 void	*ft_memset(void *b, int c, size_t n)
 {

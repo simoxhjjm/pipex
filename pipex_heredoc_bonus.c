@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_heredoc.c                                    :+:      :+:    :+:   */
+/*   pipex_heredoc_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:02:49 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 16:23:19 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:32:12 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,19 @@ void	first_child(char **av, char **envp, int fd[], int fd_heredoc)
 		ft_print_notfound();
 	else
 	{
-		paths = get_paths(envp);
 		args = ft_split(av[3], ' ');
+		paths = get_paths(envp, args[0]);
 		if (slash(args) == 3)
 			cmd_path = args[0];
 		else
-			cmd_path = check_command(av[4], paths);
+			cmd_path = check_command(av[3], paths);
+		ft_free(paths);
 		close(fd[0]);
-		fail_cheack(dup2(fd_heredoc, STDIN_FILENO), "dup2 failed");
+		err_check(dup2(fd_heredoc, STDIN_FILENO), "dup2 failed");
 		close(fd_heredoc);
-		fail_cheack(dup2(fd[1], STDOUT_FILENO), "dup2 failed");
+		err_check(dup2(fd[1], STDOUT_FILENO), "dup2 failed");
 		close(fd[1]);
-		fail_cheack(execve(cmd_path, args, envp), "execve failed");
+		err_check(execve(cmd_path, args, envp), "execve failed");
 	}
 }
 //child2
@@ -90,47 +91,50 @@ void	last__child(char **av, char **envp, int fd[])
 	char	*cmd_path;
 	char	**paths;
 
-	if (av[5][0] == '\0')
+	if (av[4][0] == '\0')
 		ft_print_notfound();
 	else
 	{
-		paths = get_paths(envp);
 		fpid = open_file(av[5], 1);
 		args = ft_split(av[4], ' ');
+		paths = get_paths(envp, args[0]);
 		if (slash(args) == 3)
 			cmd_path = args[0];
 		else
 			cmd_path = check_command(av[4], paths);
-		fail_cheack(dup2(fd[0], STDIN_FILENO), "dup2 failed");
+		ft_free(paths);
+		err_check(dup2(fd[0], STDIN_FILENO), "dup2 failed");
 		close(fd[0]);
 		close(fd[1]);
-		fail_cheack(dup2(fpid, STDOUT_FILENO), "dup2 failed");
+		err_check(dup2(fpid, STDOUT_FILENO), "dup2 failed");
 		close(fpid);
-		fail_cheack(execve(cmd_path, args, envp), "execve failed");
+		err_check(execve(cmd_path, args, envp), "execve failed");
 	}
 }
 
-void	exec_heredoc(char **av, char **envp)
+int	exec_heredoc(char **av, char **envp)
 {
 	int	fd[2];
 	int	pid1;
 	int	pid2;
 	int	fd_heredoc;
+	int	status;
 
-	fail_cheack(pipe(fd), "pipe failed");
+	status = 0;
+	err_check(pipe(fd), "pipe failed");
 	fd_heredoc = here_doc(av[2]);
 	pid1 = fork();
-	fail_cheack(pid1, "fork failed");
+	err_check(pid1, "fork failed");
 	if (pid1 == 0)
 		first_child(av, envp, fd, fd_heredoc);
 	close(fd_heredoc);
 	pid2 = fork();
-	fail_cheack(pid2, "fork failed");
+	err_check(pid2, "fork failed");
 	if (pid2 == 0)
 		last__child(av, envp, fd);
 	close(fd[1]);
 	close(fd[0]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
-	exit(EXIT_SUCCESS);
+	waitpid(pid1, &status, 0);
+	waitpid(pid2, &status, 0);
+	return (WEXITSTATUS(status));
 }

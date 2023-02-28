@@ -6,11 +6,12 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 15:08:58 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/22 18:02:02 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:44:01 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include "../pipex_bonus.h"
 
 static size_t	wc(char *s, char c)
 {

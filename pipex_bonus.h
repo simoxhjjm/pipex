@@ -6,7 +6,7 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 16:32:37 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 16:45:29 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:31:17 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,15 @@ int		ft_strchr(char *s, int c);
 //----------------BNS------------------//
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		open_file(char *file_name, int status);
-void	multiple_pipes(int ac, char **av, char **envp);
-char	**get_paths(char **envp);
+int		multiple_pipes(int ac, char **av, char **envp);
+char	**get_paths(char **envp, char *args);
 char	*check_command(char *arg, char **paths);
-void	fail_cheack(int status, char *message);
+void	err_check(int status, char *message);
 int		slash(char **cmd);
-void	fail_cheack(int status, char *message);
-void	exec_heredoc(char **av, char **envp);
+void	err_check(int status, char *message);
+int		exec_heredoc(char **av, char **envp);
+void	print_error(char *cmd);
 void	ft_print_notfound(void);
+void	ft_free(char **str);
+
 #endif

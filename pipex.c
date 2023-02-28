@@ -6,13 +6,13 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 10:39:40 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 16:50:06 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:29:27 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**get_paths(char **envp)
+char	**get_paths(char **envp, char *args)
 {
 	int		i;
 	char	**paths;
@@ -26,7 +26,9 @@ char	**get_paths(char **envp)
 	}
 	if (envp[i] == NULL)
 	{
-		write(2, "PATH= not found", 14);
+		write(2, args, ft_strlen(args));
+		write(2, " :command not found\n", 21);
+		exit(127);
 	}
 	tmp = ft_substr(envp[i], 5, ft_strlen(envp[i]));
 	paths = ft_split(tmp, ':');
@@ -52,13 +54,10 @@ char	*check_command(char *arg, char **paths)
 		free(check);
 		check = NULL;
 	}
-	free(paths);
 	free(command);
 	free(exec);
 	if (check == NULL)
-	{
-		perror("command not found");
-	}
+		print_error(arg);
 	return (check);
 }
 //check slash in command
@@ -70,6 +69,7 @@ int	slash(char **cmd)
 	{
 		write(2, cmd[0], ft_strlen(cmd[0]));
 		write(2, ": No such file or directory\n", 29);
+		exit(127);
 	}
 	else if (ft_strchr(cmd[0], '/') == 1 && access(cmd[0], X_OK) == 0)
 		return (3);
@@ -86,22 +86,23 @@ void	child1(char *infile, char *cmd1, char **envp, int fd[])
 	char	**paths;
 
 	if (cmd1[0] == '\0')
-		print_notfound();
+		print_notfound(cmd1, 0);
 	else
 	{
-		paths = get_paths(envp);
 		args = ft_split(cmd1, ' ');
+		paths = get_paths(envp, args[0]);
 		if (slash(args) == 3)
 			cmd_path = args[0];
 		else
 			cmd_path = check_command(cmd1, paths);
+		ft_free(paths);
 		close(fd[0]);
 		fpid = open_file(infile, 0);
-		fail_cheack(dup2(fpid, STDIN_FILENO), "dup2 failed");
+		err_check(dup2(fpid, STDIN_FILENO), "dup2 failed");
 		close(fpid);
-		fail_cheack(dup2(fd[1], STDOUT_FILENO), "dup2 failed");
+		err_check(dup2(fd[1], STDOUT_FILENO), "dup2 failed");
 		close(fd[1]);
-		fail_cheack(execve(cmd_path, args, envp), "execve failed");
+		err_check(execve(cmd_path, args, envp), "execve failed");
 	}
 }
 //child2
@@ -114,21 +115,22 @@ void	child2(char *outfile, char *cmd2, char **envp, int fd[])
 	char	**paths;
 
 	if (cmd2[0] == '\0')
-		print_notfound();
+		print_notfound(cmd2, 0);
 	else
 	{
-		paths = get_paths(envp);
 		fpid = open_file(outfile, 1);
 		args = ft_split(cmd2, ' ');
+		paths = get_paths(envp, args[0]);
 		if (slash(args) == 3)
 			cmd_path = args[0];
 		else
 			cmd_path = check_command(cmd2, paths);
-		fail_cheack(dup2(fd[0], STDIN_FILENO), "dup2 failed");
+		ft_free(paths);
+		err_check(dup2(fd[0], STDIN_FILENO), "dup2 failed");
 		close(fd[0]);
 		close(fd[1]);
-		fail_cheack(dup2(fpid, STDOUT_FILENO), "dup2 failed");
+		err_check(dup2(fpid, STDOUT_FILENO), "dup2 failed");
 		close(fpid);
-		fail_cheack(execve(cmd_path, args, envp), "execve failed");
+		err_check(execve(cmd_path, args, envp), "execve failed");
 	}
 }

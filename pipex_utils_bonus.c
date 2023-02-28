@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus_utils.c                                :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 16:31:56 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 16:50:36 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:33:03 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ int	open_file(char *file_name, int status)
 		fpid = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fpid == -1)
 	{
-		perror("open failed : ");
+		write(2, file_name, ft_strlen(file_name));
+		perror(" ");
 		exit(1);
 	}
 	return (fpid);
 }
 
-char	**get_paths(char **envp)
+char	**get_paths(char **envp, char *args)
 {
 	int		i;
 	char	**paths;
@@ -41,10 +42,7 @@ char	**get_paths(char **envp)
 			break ;
 	}
 	if (envp[i] == NULL)
-	{
-		write(2, "PATH= not found\n", 15);
-		exit(EXIT_FAILURE);
-	}
+		print_error(args);
 	tmp = ft_substr(envp[i], 5, ft_strlen(envp[i]));
 	paths = ft_split(tmp, ':');
 	free(tmp);
@@ -69,14 +67,10 @@ char	*check_command(char *arg, char **paths)
 		free(check);
 		check = NULL;
 	}
-	free(paths);
 	free(command);
 	free(exec);
 	if (check == NULL)
-	{
-		perror("command not found");
-		exit(EXIT_FAILURE);
-	}
+		print_error(arg);
 	return (check);
 }
 //check slash in command
@@ -88,17 +82,18 @@ int	slash(char **cmd)
 	{
 		write(2, cmd[0], ft_strlen(cmd[0]));
 		write(2, ": No such file or directory\n", 29);
+		exit(127);
 	}
 	else if (ft_strchr(cmd[0], '/') == 1 && access(cmd[0], X_OK) == 0)
 		return (3);
 	return (0);
 }
 
-void	fail_cheack(int status, char *message)
+void	err_check(int status, char *message)
 {
 	if (status == -1)
 	{
 		perror(message);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }

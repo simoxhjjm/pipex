@@ -6,7 +6,7 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 10:39:34 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/25 14:18:56 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:30:08 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,16 @@ void	*ft_memset(void *b, int c, size_t n);
 void	ft_bzero(void *s, size_t n);
 int		ft_strchr(char *s, int c);
 //--------------------------------//
-char	**get_paths(char **envp);
+char	**get_paths(char **envp, char *args);
 void	child2(char *outfile, char *cmd2, char **envp, int fd[2]);
 void	child1(char *infile, char *cmd1, char **envp, int fd[2]);
 char	*check_command(char *arg, char **paths);
-void	fail_cheack(int status, char *message);
+void	err_check(int status, char *message);
 void	errprint(void);
 int		slash(char **cmd);
 int		open_file(char *file_name, int status);
-void	print_notfound(void);
+void	print_notfound(char *cmd, int status);
+void	print_error(char *cmd);
+void	ft_free(char **str);
 
 #endif

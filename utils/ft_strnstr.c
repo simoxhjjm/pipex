@@ -6,11 +6,12 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 14:19:18 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/24 15:47:26 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:44:32 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include "../pipex_bonus.h"
 
 int	ft_strnstr(char *haystack, char *needle)
 {

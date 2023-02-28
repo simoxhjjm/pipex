@@ -6,11 +6,12 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 18:21:42 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/23 13:11:39 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/02/26 10:44:38 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include "../pipex_bonus.h"
 
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
