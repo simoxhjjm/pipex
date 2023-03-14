@@ -6,7 +6,7 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 16:31:32 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/28 10:30:45 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/03/14 13:42:06 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,7 @@ int	main(int ac, char **av, char **envp)
 		write(2, "1--> ./pipex here_doc LIMITER cmd cmd1 file\n", 44);
 		write(2, "2--> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2\n", 49);
 	}
+	while (wait(NULL) != -1)
+		;
 	return (status);
 }

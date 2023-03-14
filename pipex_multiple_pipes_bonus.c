@@ -6,7 +6,7 @@
 /*   By: melhajja <melhajja@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:03:15 by melhajja          #+#    #+#             */
-/*   Updated: 2023/02/28 11:04:05 by melhajja         ###   ########.fr       */
+/*   Updated: 2023/03/13 10:02:54 by melhajja         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	exec_last_child(char **av, int ac, char **envp, int save_fd)
 	if (pid == 0)
 		last_child(av[ac - 1], av[ac - 2], envp, save_fd);
 	close(save_fd);
-	waitpid(pid, &status, 0);
+	//waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }
 
@@ -96,7 +96,7 @@ int	exec_midd_child(char *cmd, char **envp, int *fd, int save_fd)
 	}
 	close(save_fd);
 	close(fd[1]);
-	waitpid(pid, &status, 0);
+	// waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }
 
